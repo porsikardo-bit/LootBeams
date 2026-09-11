@@ -14,6 +14,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Corregir error del autor (Generar Wrapper Limpio)
+        run: |
+          rm -f gradle/wrapper/gradle-wrapper.jar
+          gradle wrapper --gradle-version 8.0 --distribution-type bin
+
       - name: Configurar Gradle 8.0 Oficial
         uses: gradle/actions/setup-gradle@v4
         with:
