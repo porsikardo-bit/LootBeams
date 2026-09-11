@@ -1,0 +1,27 @@
+name: Compilar Mod 1.20.1
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Dar permisos a Gradle
+        run: chmod +x gradlew
+
+      - name: Construir archivo JAR
+        run: ./gradlew build
+
+      - name: Guardar Mod Listo
+        uses: actions/upload-artifact@v4
+        with:
+          name: MiMod1.20.1
+          path: build/libs/*.jar
