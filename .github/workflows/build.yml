@@ -14,15 +14,14 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Corregir error del autor (Generar Wrapper Limpio)
-        run: |
-          rm -f gradle/wrapper/gradle-wrapper.jar
-          gradle wrapper --gradle-version 8.0 --distribution-type bin
+      - name: Eliminar archivo corrupto del autor
+        run: rm -f gradle/wrapper/gradle-wrapper.jar
 
-      - name: Configurar Gradle 8.0 Oficial
+      - name: Configurar Gradle 8.0 Oficial Seguro
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.0
+          validate-wrapper: false
 
       - name: Construir archivo JAR
         run: ./gradlew build --no-daemon
