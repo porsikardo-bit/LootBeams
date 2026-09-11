@@ -1,0 +1,28 @@
+name: Compilar Mod
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Dar permisos a Gradle
+        run: chmod +x gradlew
+
+      - name: Construir archivo JAR
+        run: ./gradlew build
+
+      - name: Guardar Mod Listo
+        uses: actions/upload-artifact@v4
+        with:
+          name: MiModModificado
+          path: build/libs/*.jar
+
