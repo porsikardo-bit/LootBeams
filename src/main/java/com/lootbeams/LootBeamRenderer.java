@@ -48,14 +48,40 @@ public class LootBeamRenderer extends RenderType {
 
 	public static void renderLootBeam(PoseStack stack, MultiBufferSource buffer, float pticks, long worldtime, ItemEntity item) {
 		float beamAlpha = Configuration.BEAM_ALPHA.get().floatValue();
-		//Fade out when close
-		if (Minecraft.getInstance().player.distanceToSqr(item) < 2f) {
-			beamAlpha *= Minecraft.getInstance().player.distanceToSqr(item);
-		}
-		//Dont render beam if its too transparent
-		if (beamAlpha <= 0.15f) {
-			return;
-		}
+double distanciaCuadrada = Minecraft.getInstance().player.distanceToSqr(item);
+
+// 1. Menos de 1 bloque: Se apaga por completo
+if (distanciaCuadrada < 1.0f) {
+	return;
+}
+
+// 2. Entre 1 y 3 bloques: Se mantiene a su máximo (100% de la opacidad configurada)
+else if (distanciaCuadrada <= 9.0f) {
+	// No se altera beamAlpha para que brille al máximo
+}
+
+// 3. Entre 3 y 25 bloques: Disminuye inmediatamente al 60% de la intensidad
+else if (distanciaCuadrada <= 625.0f) {
+	beamAlpha *= 0.60f;
+}
+
+// 4. Entre 25 y 30 bloques: Se va desvaneciendo suavemente desde el 60% hasta llegar a 0%
+else if (distanciaCuadrada <= 900.0f) {
+	// Interpolación lineal entre 25 bloques (625) y 30 bloques (900)
+	float factorDesvanecimiento = (float) ((900.0f - distanciaCuadrada) / (900.0f - 625.0f));
+	beamAlpha *= (0.60f * factorDesvanecimiento);
+}
+
+// 5. Más de 30 bloques: Desaparece por completo
+else {
+	return;
+}
+
+// Si por los cálculos o configuraciones el alpha es prácticamente invisible, no renderizar
+if (beamAlpha <= 0.01f) {
+	return;
+}
+
 
 		float beamRadius = 0.05f * Configuration.BEAM_RADIUS.get().floatValue();
 		float glowRadius = beamRadius + (beamRadius * 0.2f);
@@ -63,7 +89,14 @@ public class LootBeamRenderer extends RenderType {
 		float yOffset = Configuration.BEAM_Y_OFFSET.get().floatValue();
 
 
-		Color color = getItemColor(item);
+				Color color = getItemColor(item);
+		
+		// Si el mod no detecta rareza especial o devuelve el color blanco común:
+		if (color == null || (color.getRed() >= 250 && color.getGreen() >= 250 && color.getBlue() >= 250)) {
+			// Asignamos el color Blanco Hueso / Opalina (ligeramente amarillento)
+			color = new Color(245, 242, 230); 
+		}
+
 		float R = color.getRed() / 255f;
 		float G = color.getGreen() / 255f;
 		float B = color.getBlue() / 255f;
