@@ -20,7 +20,7 @@ jobs:
       - name: Configurar Gradle 8.0 Oficial Seguro
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 8.0
+          gradle-version: 8.0.2
           validate-wrapper: false
 
       - name: Construir archivo JAR
