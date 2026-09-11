@@ -18,10 +18,16 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.0.2
-          validate-wrapper: false
+          validate-wrappers: false
 
       - name: Dar permisos de administrador a Gradle
         run: chmod +x gradlew
 
       - name: Construir archivo JAR usando Gradle del Sistema
         run: gradle build --no-daemon
+
+      - name: Guardar Mod Listo
+        uses: actions/upload-artifact@v4
+        with:
+          name: MiMod1.20.1
+          path: build/libs/*.jar
