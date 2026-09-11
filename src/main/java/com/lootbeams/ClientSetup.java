@@ -261,11 +261,8 @@ public class ClientSetup {
 		}
 
 		Item item = itemEntity.getItem().getItem();
-		boolean shouldRender = (Configuration.ALL_ITEMS.get()
-				|| (Configuration.ONLY_EQUIPMENT.get() && isEquipmentItem(item))
-				|| (Configuration.ONLY_RARE.get() && LootBeamRenderer.compatRarityCheck(itemEntity, false))
-				|| (isItemInRegistryList(Configuration.WHITELIST.get(), itemEntity.getItem().getItem())))
-				&& !isItemInRegistryList(Configuration.BLACKLIST.get(), itemEntity.getItem().getItem());
+				boolean shouldRender = !isItemInRegistryList(Configuration.BLACKLIST.get(), itemEntity.getItem().getItem());
+
 
 		if (shouldRender && (!Configuration.REQUIRE_ON_GROUND.get() || itemEntity.onGround())) {
 			delayedRenders.add(stack -> {
