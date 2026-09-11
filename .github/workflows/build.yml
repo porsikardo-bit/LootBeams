@@ -14,9 +14,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Eliminar archivo corrupto del autor
-        run: rm -f gradle/wrapper/gradle-wrapper.jar
-
       - name: Configurar Gradle 8.0 Oficial Seguro
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -26,11 +23,5 @@ jobs:
       - name: Dar permisos de administrador a Gradle
         run: chmod +x gradlew
 
-      - name: Construir archivo JAR
-        run: ./gradlew build --no-daemon
-
-      - name: Guardar Mod Listo
-        uses: actions/upload-artifact@v4
-        with:
-          name: MiMod1.20.1
-          path: build/libs/*.jar
+      - name: Construir archivo JAR usando Gradle del Sistema
+        run: gradle build --no-daemon
