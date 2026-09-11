@@ -66,21 +66,36 @@ public class LootBeamRenderer extends RenderType {
 
     public static void renderLootBeam(PoseStack stack, MultiBufferSource buffer, float pticks, long worldtime, ItemEntity item) {
         RenderSystem.enableDepthTest();
-        float beamAlpha = Configuration.BEAM_ALPHA.get().floatValue();
+                float beamAlpha = Configuration.BEAM_ALPHA.get().floatValue();
         float entityTime = item.tickCount;
-        //Fade out when close
-        double distance = Minecraft.getInstance().player.distanceToSqr(item);
-        double fadeDistance = Configuration.BEAM_FADE_DISTANCE.get().doubleValue() * 4;
-        if (distance < 3) {
-            beamAlpha *= Math.max(0, distance - 4);
-        } else if (distance > fadeDistance * 0.75f) {
-            float fade = (float) (distance - fadeDistance * 0.75f);
-            beamAlpha *= Math.max(0, 1 - fade);
+        double distanciaCuadrada = Minecraft.getInstance().player.distanceToSqr(item);
+
+        // 1. Menos de 1 bloque: Se apaga por completo
+        if (distanciaCuadrada < 1.0f) {
+            return;
         }
-        //Dont render beam if its too transparent
+        // 2. Entre 1 y 3 bloques: Se mantiene a su máximo
+        else if (distanciaCuadrada <= 9.0f) {
+            // Máxima opacidad configurada
+        }
+        // 3. Entre 3 y 25 bloques: Disminuye inmediatamente al 60%
+        else if (distanciaCuadrada <= 625.0f) {
+            beamAlpha *= 0.60f;
+        }
+        // 4. Entre 25 y 30 bloques: Se va desvaneciendo suavemente desde el 60% al 0%
+        else if (distanciaCuadrada <= 900.0f) {
+            float factorDesvanecimiento = (float) ((900.0f - distanciaCuadrada) / (900.0f - 625.0f));
+            beamAlpha *= (0.60f * factorDesvanecimiento);
+        }
+        // 5. Más de 30 bloques: Desaparece por completo
+        else {
+            return;
+        }
+
         if (beamAlpha <= 0.01f) {
             return;
         }
+
 
         float beamRadius = 0.05f * Configuration.BEAM_RADIUS.get().floatValue();
         float glowRadius = beamRadius + (beamRadius * 0.2f);
@@ -95,9 +110,17 @@ public class LootBeamRenderer extends RenderType {
 
 
         Color color = getItemColor(item);
-        float R = color.getRed() / 255f;
-        float G = color.getGreen() / 255f;
-        float B = color.getBlue() / 255f;
+
+// Si el mod no detecta rareza o devuelve el color blanco común:
+if (color == null || (color.getRed() >= 250 && color.getGreen() >= 250 && color.getBlue() >= 250)) {
+    // Forzamos el color Blanco Hueso / Opalina (ligeramente amarillento)
+    color = new Color(245, 242, 230); 
+}
+
+float R = color.getRed() / 255f;
+float G = color.getGreen() / 255f;
+float B = color.getBlue() / 255f;
+
 
         //I will rewrite the beam rendering code soon! I promise!
 
