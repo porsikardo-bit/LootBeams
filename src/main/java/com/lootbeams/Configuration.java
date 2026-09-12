@@ -165,7 +165,7 @@ public class Configuration {
 		DMCLOOT_COMPAT_RARITY = clientBuilder.comment("If a smaller tag should be rendered under with DMCLoot rarities.").define("dmcloot_compat_rarity", false);
 		CUSTOM_RARITIES = clientBuilder.comment("Define what the smaller tag should render on. Example: \"Exotic\", \"Ancient\". The string supplied has to be the tooltip line below the name. This is really only used for modpacks.").define("custom_rarities", new ArrayList<>());
 		WHITE_RARITIES = clientBuilder.comment("If rarities should ignore color and render as white (This is really only used for modpacks)").define("white_rarities", false);
-		VANILLA_RARITIES = clientBuilder.comment("If vanilla rarities should be rendered.").define("vanilla_rarities", true);
+		VANILLA_RARITIES = clientBuilder.comment("If vanilla rarities should be rendered.").define("vanilla_rarities", falase);
 		SCREEN_TOOLTIPS_REQUIRE_CROUCH = clientBuilder.comment("If the player should be crouching to see extended advanced tooltips.").define("screen_tooltips_require_crouch", true);
 		COMBINE_NAME_AND_RARITY = clientBuilder.comment("If the name and rarity should be combined into one tooltip.").define("combine_name_and_rarity", false);
 		clientBuilder.pop();
