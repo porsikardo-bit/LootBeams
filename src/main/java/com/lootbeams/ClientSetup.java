@@ -106,22 +106,8 @@ public class ClientSetup {
 						if(tooltipLines.size() > 6) {
 							Minecraft.getInstance().options.guiScale().set(1);
 						}
-						if((Configuration.SCREEN_TOOLTIPS_REQUIRE_CROUCH.get() && player.isCrouching()) || !Configuration.SCREEN_TOOLTIPS_REQUIRE_CROUCH.get()) {
-							event.getGuiGraphics().renderTooltip(Minecraft.getInstance().font, itemEntity.getItem(), x, y);
-						} else {
-							tooltipLines = List.of(tooltipLines.get(0), Component.literal(LootBeamRenderer.getRarity(itemEntity.getItem())).withStyle(itemEntity.getItem().getDisplayName().getStyle()));
-							if(ModList.get().isLoaded("apotheosis")) {
-								if(ApotheosisCompat.isApotheosisItem(itemEntity.getItem())) {
-									tooltipLines = List.of(tooltipLines.get(0), Component.literal(LootBeamRenderer.getRarity(itemEntity.getItem())).withStyle(s -> s.withColor(ApotheosisCompat.getRarityColor(itemEntity.getItem()))));
-								}
-							}
-							if(Configuration.COMBINE_NAME_AND_RARITY.get()) {
-								event.getGuiGraphics().renderTooltip(Minecraft.getInstance().font, tooltipLines, itemEntity.getItem().getTooltipImage(), itemEntity.getItem(), x, y);
-							} else {
-								event.getGuiGraphics().renderTooltip(Minecraft.getInstance().font, List.of(tooltipLines.get(0)), itemEntity.getItem().getTooltipImage(), itemEntity.getItem(), x, y);
-								event.getGuiGraphics().renderTooltip(Minecraft.getInstance().font, List.of(tooltipLines.get(1)), itemEntity.getItem().getTooltipImage(), itemEntity.getItem(), rarityX, y + Minecraft.getInstance().font.lineHeight * 2);
-							}
-						}
+												event.getGuiGraphics().renderTooltip(Minecraft.getInstance().font, itemEntity.getItem(), x, y);
+
 						Minecraft.getInstance().options.guiScale().set(guiScale);
 					}
 				}
