@@ -106,7 +106,14 @@ public class ClientSetup {
 						if(tooltipLines.size() > 6) {
 							Minecraft.getInstance().options.guiScale().set(1);
 						}
-												event.getGuiGraphics().renderTooltip(Minecraft.getInstance().font, itemEntity.getItem(), x, y);
+																		if (player.isCrouching()) {
+							// Si te agachas (Shift): Muestra toda la información extendida y detallada
+							event.getGuiGraphics().renderTooltip(Minecraft.getInstance().font, itemEntity.getItem(), x, y);
+						} else {
+							// Si estás parado normal: Muestra ÚNICAMENTE el nombre limpio del objeto (Línea 0 del tooltip)
+							event.getGuiGraphics().renderTooltip(Minecraft.getInstance().font, List.of(tooltipLines.get(0)), itemEntity.getItem().getTooltipImage(), itemEntity.getItem(), x, y);
+						}
+
 
 						Minecraft.getInstance().options.guiScale().set(guiScale);
 					}
